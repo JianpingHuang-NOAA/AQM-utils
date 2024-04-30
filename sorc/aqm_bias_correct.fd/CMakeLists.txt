@@ -21,7 +21,8 @@ list(APPEND SRC_FLIB2
     ${FLIB}/expand_filename.f90
     ${FLIB}/find_runs.f90
     ${FLIB}/get_free_unit.f90
-    ${FLIB}/get_param_module.f90     
+    ${FLIB}/get_param_module.f90
+    ${FLIB}/infill.f90
     ${FLIB}/message_nolog.f90
     ${FLIB}/multisets.f90
     ${FLIB}/netcdf_sup.f90
