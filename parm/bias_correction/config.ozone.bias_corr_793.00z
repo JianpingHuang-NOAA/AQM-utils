@@ -202,7 +202,7 @@ derivative input V wind         = vgrd10m
 * Negative lower limit accepts instrument drift in AirNow data sets.
 
 obs minimum valid input = -0.005
-obs maximum valid input =  5.0
+obs maximum valid input =  0.5
 
 * Obs data blackout interval, to suppress all obs within problematic
 * time interval, such as Fourth of July.
