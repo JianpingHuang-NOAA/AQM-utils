@@ -70,7 +70,7 @@
 
     integer status
   
-    character grib_id*3
+    character grib_id*4
 
     character(*), parameter :: calendar  = 'gregorian'
     character*16 cmaqspec(ncmaq),varlist(ncmaq)
@@ -209,7 +209,7 @@
       ifilw=52
 
       write(chtmp,'(i3.3)')nt
-      write(grib_id,'(i3.3)')id_gribdomain
+      write(grib_id,'(i4.4)')id_gribdomain
 
       call baopen(ifilw,trim(outfile)//'.f'//chtmp//'.'//grib_id//&
                        '.grib2',ierr)

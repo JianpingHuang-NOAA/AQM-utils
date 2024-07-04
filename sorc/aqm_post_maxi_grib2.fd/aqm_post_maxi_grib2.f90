@@ -26,7 +26,7 @@ program aqm_post_maxi_grib2_793
    						!   fail (stdlit)
 ! Local variables.
 
-   character outfile*200,grib_id*3
+   character outfile*200,grib_id*4
    integer nhours,nhours8, nt,nowtime8,total_day
    integer dims_in4(4), dims_in3(3)
 !   logical fail1, fail2
@@ -310,7 +310,7 @@ program aqm_post_maxi_grib2_793
 !-- set file unit
 
    ifilw1=51
-   write(grib_id,'(i3.3)')id_gribdomain
+   write(grib_id,'(i4.4)')id_gribdomain
    call baopen(ifilw1,trim(outfile)//'.'//grib_id//&
              '.grib2',ierr)
    if(ierr.ne.0) then
