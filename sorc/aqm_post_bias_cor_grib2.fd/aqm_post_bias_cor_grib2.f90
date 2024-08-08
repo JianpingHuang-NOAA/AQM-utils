@@ -8,8 +8,10 @@
 !  11/23/2022 Jianping Huang and Kai Wang
 !            modified for post-processing aqmv7.0 (ufs-aqm) hourly BC output files
 !
+!  08/06/2024 Jianping Huang and Kai Wang
+!            modified for post-processing aqmv8.0 (ufs-aqm) hourly BC output files
 !------------------------------------------------------------------------------
-      program aqm_post_bias_cor_grib2_793
+      program aqm_post_bias_cor_grib2_1144
 
       use config, only : dp
       use read__netcdf_var
@@ -37,7 +39,7 @@
       integer    ierr,ier
 ! for grib2 
       integer, parameter   :: max_bytes=20000000
-      integer, parameter   :: nx=775,ny=488
+      integer, parameter   :: nx=1128,ny=698
       integer, parameter   :: ncmaq=3
 !
       integer listsec0(2)
@@ -197,9 +199,9 @@
       nowtime=(ihour+1)*10000
       do nt=1,nhours
 
-       GRID=793
-       im=775
-       jm=488
+       GRID=1144
+       im=1128
+       jm=698
        jf=im*jm
 !
       base_year=iyear
@@ -418,5 +420,5 @@
 
        end do   ! nt loop
          
-  end program aqm_post_bias_cor_grib2_793
+  end program aqm_post_bias_cor_grib2_1144
 

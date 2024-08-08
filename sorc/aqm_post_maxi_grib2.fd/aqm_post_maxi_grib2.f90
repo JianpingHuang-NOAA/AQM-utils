@@ -11,8 +11,9 @@
 !  Ho-Chun Huang     NOV 26 2019   Update ipdstmpl(19) to be consistent with raw model for 
 !                                  max_1hr_o3 and max_8hr_o3
 !  Jianping Huang   11/02/2022   support AQMv7.0 (ufs-aqm) implementation
+!  Jianping Huang   08/06/2024   support AQMv8.0 (AQM_NA_9km) implementation
 !------------------------------------------------------------------------------
-program aqm_post_maxi_grib2_793 
+program aqm_post_maxi_grib2_1144 
 
    use config, only : dp
    use read__netcdf_var
@@ -43,7 +44,7 @@ program aqm_post_maxi_grib2_793
    integer    i, j 
 ! for grib2 by JP
 !   integer, parameter   :: max_bytes=20000000
-   integer, parameter   :: nx=775,ny=488
+   integer, parameter   :: nx=1128,ny=698
    integer, parameter   :: max_bytes=nx*ny*4
    integer, parameter   :: markutc=05 
    integer, parameter   :: ncmaq=4
@@ -368,9 +369,9 @@ program aqm_post_maxi_grib2_793
       nowtime=(ihour+1)*10000
 !      do nt=1,nhours
 
-      GRID=793
-      im=775
-      jm=488
+      GRID=1144
+      im=1128
+      jm=698
       jf=im*jm
 !
       cgrib1=''
@@ -695,7 +696,7 @@ program aqm_post_maxi_grib2_793
      
    print*,"it is done ! jphuang" 
          
-end program aqm_post_maxi_grib2_793 
+end program aqm_post_maxi_grib2_1144 
 
 !-----------------------------------------------------------------------
        subroutine g2getbits(ibm,scl,len,bmap,g,ibs,ids,nbits)
