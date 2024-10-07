@@ -68,7 +68,7 @@
 
       integer  begyear,begdate,begtime,dtstep,numts,tstepdiff      
       namelist /control/bndname,dtstep,tstepdiff,mofile,	&	  !  input file preffix and suffix
-       lbcfile,topofile
+       lbcfile,topofile,inblend  ! inside blending layers
       
       CALL MPI_Init(ierr)
       CALL MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
@@ -76,7 +76,8 @@
       
       call aq_blank(16*nspecies,bndname)
       call aq_blank(16*nspecies,checkname)
-
+      
+      inblend=0.
       sfact(1:ngocart,1:nspecies)=0.
       checkfact(1:ngocart,1:nspecies)=0.
 ! read converting information
@@ -149,7 +150,9 @@
       call check(nf90_inquire_dimension(ncid,iddim_lat,len=nlat))
       call check(nf90_inq_dimid(ncid,'halo',iddim_halo))
       call check(nf90_inquire_dimension(ncid,iddim_halo,len=nhalo))
-      jmax=jmax1-nhalo*2
+      
+      nhalo_outside=nhalo-inblend ! outside halo layers
+      jmax=jmax1-nhalo_outside*2
       if(nlon.ne.imax.or.nlat.ne.jmax) then
         print*,'dimension mismatch ',nlon,imax,nlat,jmax
 	stop
@@ -319,7 +322,7 @@
 ! --- left and right
        
       do j=1,jmax
-       jy=j+nhalo
+       jy=j+nhalo_outside
            
 	do i=1,nhalo
 	 do m=1,2
@@ -397,7 +400,7 @@
         if(iret.ne.0) then
 	 print*,'error reading gocart temperature ',k
 	 stop
-        endif
+        endif	
 	call nemsio_readrecv(gfile,'spfh','mid layer',k,work3, &  ! specific humidity (kg/kg)
      	  iret=iret)
         if(iret.ne.0) then
@@ -408,7 +411,7 @@
 	do i=1,igocart
 	 do j=1,jgocart
 	  zgocart(i,j,k+1)=zgocart(i,j,k)+work1(i+(j-1)*igocart)  ! interface level
-          pgocart(i,j,k)=amax1(worka(i+(j-1)*igocart)-workc(i+(j-1)*igocart),0.1) 
+          pgocart(i,j,k)=worka(i+(j-1)*igocart) - workc(i+(j-1)*igocart)  
 	  tgocart(i,j,k)=work2(i+(j-1)*igocart)
 	  tv=work2(i+(j-1)*igocart)*(1+0.608*amax1(work3(i+(j-1)*igocart),1.e-15))  ! virtual temperature
 	  airgocart(i,j,k)=pgocart(i,j,k)/tv/287.04 ! air density in kg/m3  R= 287.04 m3 Pa /kg/K
@@ -419,7 +422,7 @@
 ! ---find vertical index for top and bottom LBC 	
 	do i=1,imax
 	 do j=1,nhalo
-	  do m=1,2
+	  do m=1,2		 
 	  
 	  x=bndcoordx(i,j,m,1)
 	  y=bndcoordx(i,j,m,2)
@@ -457,7 +460,7 @@
 ! ---find vertical index for left and right LBC 	
 	do i=1,nhalo
 	 do j=1,jmax
-	  do m=1,2
+	  do m=1,2		 
 	  
 	  x=bndcoordy(i,j,m,1)
 	  y=bndcoordy(i,j,m,2)
@@ -492,6 +495,7 @@
        enddo
       enddo
        
+       	
   ! begin species interpolation                
   do L1=1,ngocart
 
@@ -584,7 +588,7 @@
        	
 
 ! begin output
-     fillval=-9e33
+     fillval=0./0.
      print*,'start overwrite' 
       do L=1,noutbnd       ! check if gocart supplies all species, otherwise do not overwrite the existing aerosol
 
